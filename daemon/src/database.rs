@@ -25,28 +25,28 @@ async fn insert_event(db: &DbConn, event_type: EventType) -> anyhow::Result<()> 
     Ok(())
 }
 
-pub async fn exec_start(database_url: &str) -> anyhow::Result<()> {
+pub async fn db_write_exec_start(database_url: &str) -> anyhow::Result<()> {
     let db = setup_database(database_url).await?;
     insert_event(&db, EventType::ExecStart).await?;
 
     Ok(())
 }
 
-pub async fn exec_stop(database_url: &str) -> anyhow::Result<()> {
+pub async fn db_write_exec_stop(database_url: &str) -> anyhow::Result<()> {
     let db = setup_database(database_url).await?;
     insert_event(&db, EventType::ExecStop).await?;
 
     Ok(())
 }
 
-pub async fn before_sleep(database_url: &str) -> anyhow::Result<()> {
+pub async fn db_write_before_sleep(database_url: &str) -> anyhow::Result<()> {
     let db = setup_database(database_url).await?;
     insert_event(&db, EventType::BeforeSleep).await?;
 
     Ok(())
 }
 
-pub async fn after_sleep(database_url: &str) -> anyhow::Result<()> {
+pub async fn db_write_after_sleep(database_url: &str) -> anyhow::Result<()> {
     let db = setup_database(database_url).await?;
     insert_event(&db, EventType::AfterSleep).await?;
 

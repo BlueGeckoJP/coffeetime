@@ -1,3 +1,4 @@
+mod data_processing;
 mod database;
 
 use clap::{Parser, Subcommand};
@@ -24,10 +25,10 @@ async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::ExecStart => database::exec_start(&cli.database_url).await?,
-        Commands::ExecStop => database::exec_stop(&cli.database_url).await?,
-        Commands::BeforeSleep => database::before_sleep(&cli.database_url).await?,
-        Commands::AfterSleep => database::after_sleep(&cli.database_url).await?,
+        Commands::ExecStart => data_processing::exec_start(&cli.database_url).await?,
+        Commands::ExecStop => data_processing::exec_stop(&cli.database_url).await?,
+        Commands::BeforeSleep => data_processing::before_sleep(&cli.database_url).await?,
+        Commands::AfterSleep => data_processing::after_sleep(&cli.database_url).await?,
     }
 
     Ok(())
