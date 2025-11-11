@@ -377,6 +377,7 @@ name = "coffeetime"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "chrono",
  "gtk4",
  "sea-orm",
  "shared_entities",

@@ -22,5 +22,12 @@ fn build_ui(app: &Application) {
         .default_height(300)
         .build();
 
+    /*
+    println!("{:?}", {
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        rt.block_on(async { database::get_today_data("sqlite://daemon/test.db").await })
+    });
+    */
+
     window.present();
 }
