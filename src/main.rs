@@ -1,7 +1,9 @@
 mod database;
 
+use adw::{ApplicationWindow, HeaderBar};
 use anyhow::Ok;
-use gtk::{Application, ApplicationWindow, prelude::*};
+use gtk::{Application, prelude::*};
+use gtk::{Box, Label, Orientation};
 
 fn main() -> anyhow::Result<()> {
     let app = Application::builder()
@@ -15,19 +17,25 @@ fn main() -> anyhow::Result<()> {
 }
 
 fn build_ui(app: &Application) {
-    let window = ApplicationWindow::builder()
-        .application(app)
-        .title("Coffeetime")
-        .default_width(400)
-        .default_height(300)
+    let header = HeaderBar::builder()
+        .title_widget(&Label::new(Some("Coffeetime")))
         .build();
 
-    /*
-    println!("{:?}", {
-        let rt = tokio::runtime::Runtime::new().unwrap();
-        rt.block_on(async { database::get_today_data("sqlite://daemon/test.db").await })
-    });
-    */
+    let top_box = Box::builder()
+        .halign(gtk::Align::Fill)
+        .valign(gtk::Align::Fill)
+        .orientation(Orientation::Vertical)
+        .spacing(0)
+        .build();
+
+    top_box.append(&header);
+
+    let window = ApplicationWindow::builder()
+        .application(app)
+        .default_width(600)
+        .default_height(400)
+        .content(&top_box)
+        .build();
 
     window.present();
 }
