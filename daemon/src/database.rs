@@ -1,55 +1,55 @@
-use sea_orm::{ActiveModelTrait, ActiveValue, Database, DbConn};
+use sea_orm::{ActiveModelTrait, ActiveValue, ConnectionTrait, Database, DbConn, Schema};
 
 use crate::entities::data::EventType;
 
-pub async fn exec_start(database_url: &str) -> anyhow::Result<()> {
-    let db: DbConn = Database::connect(database_url).await?;
+async fn setup_database(database_url: &str) -> anyhow::Result<DbConn> {
+    let db = Database::connect(database_url).await?;
 
+    let builder = db.get_database_backend();
+    let schema = Schema::new(builder);
+
+    let mut create_table_stmt = schema.create_table_from_entity(crate::entities::data::Entity);
+
+    db.execute(create_table_stmt.if_not_exists()).await?;
+
+    Ok(db)
+}
+
+async fn insert_event(db: &DbConn, event_type: EventType) -> anyhow::Result<()> {
     let data = crate::entities::data::ActiveModel {
-        event_type: ActiveValue::Set(EventType::ExecStart),
+        event_type: ActiveValue::Set(event_type),
         timestamp: ActiveValue::Set(chrono::Utc::now()),
         ..Default::default()
     };
-    data.insert(&db).await?;
+    data.insert(db).await?;
+
+    Ok(())
+}
+
+pub async fn exec_start(database_url: &str) -> anyhow::Result<()> {
+    let db = setup_database(database_url).await?;
+    insert_event(&db, EventType::ExecStart).await?;
 
     Ok(())
 }
 
 pub async fn exec_stop(database_url: &str) -> anyhow::Result<()> {
-    let db: DbConn = Database::connect(database_url).await?;
-
-    let data = crate::entities::data::ActiveModel {
-        event_type: ActiveValue::Set(EventType::ExecStop),
-        timestamp: ActiveValue::Set(chrono::Utc::now()),
-        ..Default::default()
-    };
-    data.insert(&db).await?;
+    let db = setup_database(database_url).await?;
+    insert_event(&db, EventType::ExecStop).await?;
 
     Ok(())
 }
 
 pub async fn before_sleep(database_url: &str) -> anyhow::Result<()> {
-    let db: DbConn = Database::connect(database_url).await?;
-
-    let data = crate::entities::data::ActiveModel {
-        event_type: ActiveValue::Set(EventType::BeforeSleep),
-        timestamp: ActiveValue::Set(chrono::Utc::now()),
-        ..Default::default()
-    };
-    data.insert(&db).await?;
+    let db = setup_database(database_url).await?;
+    insert_event(&db, EventType::BeforeSleep).await?;
 
     Ok(())
 }
 
 pub async fn after_sleep(database_url: &str) -> anyhow::Result<()> {
-    let db: DbConn = Database::connect(database_url).await?;
-
-    let data = crate::entities::data::ActiveModel {
-        event_type: ActiveValue::Set(EventType::AfterSleep),
-        timestamp: ActiveValue::Set(chrono::Utc::now()),
-        ..Default::default()
-    };
-    data.insert(&db).await?;
+    let db = setup_database(database_url).await?;
+    insert_event(&db, EventType::AfterSleep).await?;
 
     Ok(())
 }
