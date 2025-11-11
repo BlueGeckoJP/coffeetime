@@ -1,3 +1,5 @@
+use clap::{Parser, Subcommand};
+
 #[derive(Parser)]
 #[command(name = "coffeetime-daemon")]
 struct Cli {
@@ -13,7 +15,8 @@ enum Commands {
     AfterSleep,
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let cli = Cli::parse();
 
     match cli.command {
