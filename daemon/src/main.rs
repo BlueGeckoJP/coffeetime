@@ -1,5 +1,4 @@
 mod database;
-mod entities;
 
 use clap::{Parser, Subcommand};
 

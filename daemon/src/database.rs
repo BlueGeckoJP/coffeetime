@@ -1,6 +1,5 @@
 use sea_orm::{ActiveModelTrait, ActiveValue, ConnectionTrait, Database, DbConn, Schema};
-
-use crate::entities::data::EventType;
+use shared_entities::EventType;
 
 async fn setup_database(database_url: &str) -> anyhow::Result<DbConn> {
     let db = Database::connect(database_url).await?;
@@ -8,7 +7,7 @@ async fn setup_database(database_url: &str) -> anyhow::Result<DbConn> {
     let builder = db.get_database_backend();
     let schema = Schema::new(builder);
 
-    let mut create_table_stmt = schema.create_table_from_entity(crate::entities::data::Entity);
+    let mut create_table_stmt = schema.create_table_from_entity(shared_entities::Entity);
 
     db.execute(create_table_stmt.if_not_exists()).await?;
 
@@ -16,7 +15,7 @@ async fn setup_database(database_url: &str) -> anyhow::Result<DbConn> {
 }
 
 async fn insert_event(db: &DbConn, event_type: EventType) -> anyhow::Result<()> {
-    let data = crate::entities::data::ActiveModel {
+    let data = shared_entities::ActiveModel {
         event_type: ActiveValue::Set(event_type),
         timestamp: ActiveValue::Set(chrono::Utc::now()),
         ..Default::default()

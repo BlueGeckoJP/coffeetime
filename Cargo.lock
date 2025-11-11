@@ -390,6 +390,7 @@ dependencies = [
  "chrono",
  "clap",
  "sea-orm",
+ "shared_entities",
  "tokio",
 ]
 
@@ -2132,6 +2133,13 @@ dependencies = [
  "cfg-if",
  "cpufeatures",
  "digest",
+]
+
+[[package]]
+name = "shared_entities"
+version = "0.1.0"
+dependencies = [
+ "sea-orm",
 ]
 
 [[package]]

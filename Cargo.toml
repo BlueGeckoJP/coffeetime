@@ -18,4 +18,4 @@ version = "0.10"
 features = ["v4_2"]
 
 [workspace]
-members = ["daemon"]
+members = ["daemon", "shared_entities"]
