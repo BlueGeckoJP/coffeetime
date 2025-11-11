@@ -1,6 +1,7 @@
 mod data_processing;
 mod database;
 mod draw_graph;
+mod utils;
 
 use adw::{ApplicationWindow, HeaderBar};
 use anyhow::Ok;
