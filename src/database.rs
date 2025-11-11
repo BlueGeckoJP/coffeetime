@@ -1,19 +1,5 @@
 use chrono::{Local, TimeZone, Utc};
-use sea_orm::{ColumnTrait, Database, EntityTrait, QueryFilter, QuerySelect};
-
-pub async fn get_database_data(
-    database_url: &str,
-    limit: Option<u64>,
-) -> anyhow::Result<Vec<shared_entities::Model>> {
-    let db = Database::connect(database_url).await?;
-
-    let data = shared_entities::Entity::find()
-        .limit(limit)
-        .all(&db)
-        .await?;
-
-    Ok(data)
-}
+use sea_orm::{ColumnTrait, Database, EntityTrait, QueryFilter};
 
 pub async fn get_today_data(database_url: &str) -> anyhow::Result<Vec<shared_entities::Model>> {
     let db = Database::connect(database_url).await?;
