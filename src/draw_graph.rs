@@ -51,9 +51,6 @@ pub fn draw_graph() -> DrawingArea {
     drawing_area.set_content_height(300);
 
     drawing_area.set_draw_func(move |_, context, width, height| {
-        // context.set_source_rgb(1.0, 1.0, 1.0);
-        // context.paint().unwrap();
-
         let label_for_get_color = gtk::Label::new(None);
         let label_style = label_for_get_color.style_context();
         let label_color = label_style.color();
@@ -73,9 +70,12 @@ pub fn draw_graph() -> DrawingArea {
         ];
 
         let bar_count = data.len() as f64;
-        let padding = 40.0;
-        let chart_width = width as f64 - 2.0 * padding;
-        let chart_height = height as f64 - 2.0 * padding;
+        let padding_left = 30.0;
+        let padding_right = 50.0;
+        let padding_top = 40.0;
+        let padding_bottom = 40.0;
+        let chart_width = width as f64 - padding_left - padding_right;
+        let chart_height = height as f64 - padding_top - padding_bottom;
         let bar_width = (chart_width / bar_count) * 0.7;
         let bar_spacing = chart_width / bar_count;
         let max_value = 24.0; // 24 hours max
@@ -84,37 +84,33 @@ pub fn draw_graph() -> DrawingArea {
         context.set_line_width(1.0);
         for i in 0..=5 {
             context.set_source_rgb(1.0, 1.0, 1.0);
-            let y = padding + (chart_height / 5.0) * i as f64;
-            context.move_to(padding, y);
-            context.line_to(width as f64 - padding, y);
+            let y = padding_top + (chart_height / 5.0) * i as f64;
+            context.move_to(padding_left, y);
+            context.line_to(width as f64 - padding_right, y);
             context.stroke().unwrap();
 
             // draw y-axis labels
             context.set_source_rgb(label_red, label_green, label_blue);
             let value = max_value - (max_value / 5.0) * i as f64;
-            context.move_to(5.0, y + 5.0);
+            context.move_to(width as f64 - padding_right + 5.0, y + 5.0);
             context.show_text(&format!("{:.0}h", value)).unwrap();
         }
 
         // draw bars
         for (i, (label, value)) in data.iter().enumerate() {
-            let x = padding + (i as f64 * bar_spacing) + (bar_spacing - bar_width) / 2.0;
+            let x = padding_left + (i as f64 * bar_spacing) + (bar_spacing - bar_width) / 2.0;
             let bar_height = (value / max_value) * chart_height;
-            let y = padding + chart_height - bar_height;
+            let y = padding_top + chart_height - bar_height;
 
             // draw bar
             context.set_source_rgb(0.3, 0.6, 0.9);
-            draw_rounded_rectangle_top(context, x, y, bar_width, bar_height + 1.0, 5.0); // +1.0 to height to avoid gap
+            draw_rounded_rectangle_top(context, x, y, bar_width, bar_height + 1.0, 10.0);
             context.fill().unwrap();
 
             // draw x-axis labels and values
             context.set_source_rgb(label_red, label_green, label_blue);
-            context.move_to(x + bar_width / 4.0, height as f64 - padding + 20.0);
+            context.move_to(x + bar_width / 4.0, height as f64 - padding_bottom + 20.0);
             context.show_text(label).unwrap();
-
-            // draw value above bar
-            // context.move_to(x + bar_width / 4.0, y - 5.0);
-            // context.show_text(&format!("{:.1}h", value)).unwrap();
         }
     });
 
