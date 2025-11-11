@@ -1,3 +1,6 @@
+mod database;
+mod entities;
+
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
@@ -5,6 +8,8 @@ use clap::{Parser, Subcommand};
 struct Cli {
     #[command(subcommand)]
     command: Commands,
+    #[arg(long, default_value = "sqlite://test.db?mode=rwc")]
+    database_url: String,
 }
 
 #[derive(Subcommand)]
@@ -16,21 +21,15 @@ enum Commands {
 }
 
 #[tokio::main]
-async fn main() {
+async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::ExecStart => {
-            // Handle ExecStart command
-        }
-        Commands::ExecStop => {
-            // Handle ExecStop command
-        }
-        Commands::BeforeSleep => {
-            // Handle BeforeSleep command
-        }
-        Commands::AfterSleep => {
-            // Handle AfterSleep command
-        }
+        Commands::ExecStart => database::exec_start(&cli.database_url).await?,
+        Commands::ExecStop => database::exec_stop(&cli.database_url).await?,
+        Commands::BeforeSleep => database::before_sleep(&cli.database_url).await?,
+        Commands::AfterSleep => database::after_sleep(&cli.database_url).await?,
     }
+
+    Ok(())
 }
