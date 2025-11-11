@@ -12,7 +12,7 @@ fn main() -> glib::ExitCode {
 fn build_ui(app: &Application) {
     let window = ApplicationWindow::builder()
         .application(app)
-        .title("Coffee Time")
+        .title("Coffeetime")
         .default_width(400)
         .default_height(300)
         .build();
