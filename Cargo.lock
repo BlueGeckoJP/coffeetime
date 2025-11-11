@@ -379,6 +379,7 @@ dependencies = [
  "anyhow",
  "gtk4",
  "sea-orm",
+ "shared_entities",
  "tokio",
 ]
 

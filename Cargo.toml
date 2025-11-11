@@ -11,6 +11,7 @@ sea-orm = { version = "2.0.0-rc", features = [
     "runtime-tokio-rustls",
     "macros",
 ] }
+shared_entities = { path = "./shared_entities" }
 
 [dependencies.gtk]
 package = "gtk4"

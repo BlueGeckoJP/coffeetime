@@ -1,12 +1,17 @@
-use gtk::{Application, ApplicationWindow, glib, prelude::*};
+mod database;
 
-fn main() -> glib::ExitCode {
+use anyhow::Ok;
+use gtk::{Application, ApplicationWindow, prelude::*};
+
+fn main() -> anyhow::Result<()> {
     let app = Application::builder()
         .application_id("me.bluegecko.coffeetime")
         .build();
 
     app.connect_activate(build_ui);
-    app.run()
+    app.run();
+
+    Ok(())
 }
 
 fn build_ui(app: &Application) {
