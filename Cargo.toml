@@ -19,5 +19,9 @@ package = "gtk4"
 version = "0.10"
 features = ["v4_2"]
 
+[dependencies.adw]
+package = "libadwaita"
+version = "0.8"
+
 [workspace]
 members = ["daemon", "shared_entities"]
