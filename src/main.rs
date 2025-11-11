@@ -1,5 +1,6 @@
 mod data_processing;
 mod database;
+mod draw_graph;
 
 use adw::{ApplicationWindow, HeaderBar};
 use anyhow::Ok;
@@ -41,7 +42,7 @@ fn build_ui(app: &Application) {
         .halign(gtk::Align::Start)
         .margin_top(0)
         .margin_start(16)
-        .margin_end(12)
+        .margin_end(32)
         .build();
 
     today_screen_time_label.set_markup(
@@ -52,8 +53,11 @@ fn build_ui(app: &Application) {
         .to_string(),
     );
 
+    let graph = draw_graph::draw_graph();
+
     top_box.append(&today_label);
     top_box.append(&today_screen_time_label);
+    top_box.append(&graph);
 
     let base_box = Box::builder()
         .halign(gtk::Align::Fill)
