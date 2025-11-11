@@ -1,3 +1,4 @@
+mod data_processing;
 mod database;
 
 use adw::{ApplicationWindow, HeaderBar};
@@ -43,7 +44,13 @@ fn build_ui(app: &Application) {
         .margin_end(12)
         .build();
 
-    today_screen_time_label.set_markup("<span font='32'>2h 30m</span>");
+    today_screen_time_label.set_markup(
+        &format!(
+            "<span font='32'>{}</span>",
+            data_processing::today_total_screen_time().unwrap_or("0h 0m".to_string())
+        )
+        .to_string(),
+    );
 
     top_box.append(&today_label);
     top_box.append(&today_screen_time_label);
