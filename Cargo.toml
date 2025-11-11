@@ -5,6 +5,12 @@ edition = "2024"
 
 [dependencies]
 tokio = { version = "1.47", features = ["full"] }
+anyhow = "1.0"
+sea-orm = { version = "2.0.0-rc", features = [
+    "sqlx-sqlite",
+    "runtime-tokio-rustls",
+    "macros",
+] }
 
 [dependencies.gtk]
 package = "gtk4"
@@ -12,6 +18,4 @@ version = "0.10"
 features = ["v4_2"]
 
 [workspace]
-members = [
-    "daemon",
-]
+members = ["daemon"]
