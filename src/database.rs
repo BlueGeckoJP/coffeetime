@@ -75,3 +75,14 @@ pub async fn get_last_seven_days_active_screen(
 
     Ok(result)
 }
+
+pub fn get_db_path(database_path: Option<String>) -> String {
+    let share_directory = dirs::home_dir().unwrap().join(".local/share/coffeetime");
+    let default_db_path = share_directory.join("coffeetime.db");
+    std::fs::create_dir_all(share_directory).unwrap();
+
+    match database_path {
+        Some(path) => format!("sqlite://{}", path),
+        None => format!("sqlite://{}", default_db_path.to_string_lossy()),
+    }
+}

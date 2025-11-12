@@ -1,8 +1,8 @@
-use crate::database;
+use crate::database::{self, get_db_path};
 
 pub fn today_total_screen_time() -> anyhow::Result<String> {
     let rt = tokio::runtime::Runtime::new()?;
-    let data = rt.block_on(database::get_today_active_screen("sqlite://daemon/test.db"))?;
+    let data = rt.block_on(database::get_today_active_screen(&get_db_path(None)))?;
 
     let hours = data.num_hours();
     let minutes = data.num_minutes() % 60;
@@ -12,9 +12,9 @@ pub fn today_total_screen_time() -> anyhow::Result<String> {
 
 pub fn last_seven_days_screen_time_f64() -> anyhow::Result<Vec<f64>> {
     let rt = tokio::runtime::Runtime::new()?;
-    let data = rt.block_on(database::get_last_seven_days_active_screen(
-        "sqlite://daemon/test.db",
-    ))?;
+    let data = rt.block_on(database::get_last_seven_days_active_screen(&get_db_path(
+        None,
+    )))?;
 
     let mut result = Vec::with_capacity(7);
     for duration in data {
