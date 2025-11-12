@@ -5,7 +5,7 @@ Before=shutdown.target
 
 [Service]
 Type=oneshot
-ExecStart=/bin/sh -c "cd $HOME && ./.local/share/coffeetime/coffeetime-daemon exec-stop"
+ExecStart=/bin/sh -c "<<<EXEC_PATH>>> -d <<<DB_PATH>>> exec-stop"
 
 [Install]
 WantedBy=default.target

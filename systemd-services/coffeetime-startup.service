@@ -4,7 +4,7 @@ After=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/bin/sh -c "cd $HOME && ./.local/share/coffeetime/coffeetime-daemon exec-start"
+ExecStart=/bin/sh -c "<<<EXEC_PATH>>> -d <<<DB_PATH>>> exec-start"
 
 [Install]
 WantedBy=default.target
