@@ -5,6 +5,8 @@ use gtk::{
     prelude::{DrawingAreaExt, DrawingAreaExtManual, StyleContextExt, WidgetExt},
 };
 
+use crate::data_processing;
+
 fn draw_rounded_rectangle_top(
     context: &cairo::Context,
     x: f64,
@@ -14,6 +16,7 @@ fn draw_rounded_rectangle_top(
     radius: f64,
 ) {
     let degrees = PI / 180.0;
+    let radius = radius.min(height / 2.0);
 
     context.new_path();
 
@@ -59,14 +62,15 @@ pub fn draw_graph() -> DrawingArea {
         let label_blue = label_color.blue() as f64;
 
         // test data
+        let num_data = data_processing::last_seven_days_screen_time_f64().unwrap_or(vec![]);
         let data = [
-            ("Mon", 5.5),
-            ("Tue", 6.0),
-            ("Wed", 4.0),
-            ("Thu", 7.5),
-            ("Fri", 3.0),
-            ("Sat", 8.0),
-            ("Sun", 2.5),
+            ("6d ago", *num_data.get(6).unwrap_or(&0.0)),
+            ("5d ago", *num_data.get(5).unwrap_or(&0.0)),
+            ("4d ago", *num_data.get(4).unwrap_or(&0.0)),
+            ("3d ago", *num_data.get(3).unwrap_or(&0.0)),
+            ("2d ago", *num_data.get(2).unwrap_or(&0.0)),
+            ("1d ago", *num_data.get(1).unwrap_or(&0.0)),
+            ("Today", *num_data.first().unwrap_or(&0.0)),
         ];
 
         let bar_count = data.len() as f64;
@@ -104,7 +108,9 @@ pub fn draw_graph() -> DrawingArea {
 
             // draw bar
             context.set_source_rgb(0.3, 0.6, 0.9);
-            draw_rounded_rectangle_top(context, x, y, bar_width, bar_height + 1.0, 10.0);
+            if bar_height > 1.0 {
+                draw_rounded_rectangle_top(context, x, y, bar_width, bar_height + 1.0, 10.0);
+            }
             context.fill().unwrap();
 
             // draw x-axis labels and values
