@@ -1,0 +1,10 @@
+[Unit]
+Description=Coffeetime Startup
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c "cd $HOME && ./.local/bin/coffeetime-daemon exec-start"
+
+[Install]
+WantedBy=default.target

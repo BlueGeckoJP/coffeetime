@@ -1,0 +1,11 @@
+[Unit]
+Description=Coffeetime Shutdown
+DefaultDependencies=no
+Before=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c "cd $HOME && ./.local/bin/coffeetime-daemon exec-stop"
+
+[Install]
+WantedBy=default.target

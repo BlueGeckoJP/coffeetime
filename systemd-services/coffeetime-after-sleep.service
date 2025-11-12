@@ -1,0 +1,10 @@
+[Unit]
+Description=Coffeetime After Sleep
+After=sleep.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c "cd $HOME && ./.local/bin/coffeetime-daemon after-sleep"
+
+[Install]
+WantedBy=sleep.target
