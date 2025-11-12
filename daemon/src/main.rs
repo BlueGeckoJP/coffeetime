@@ -30,7 +30,7 @@ async fn main() -> anyhow::Result<()> {
 
     let database_url = match cli.database_url {
         Some(url) => url,
-        None => format!("sqlite://{}", default_db_path.to_string_lossy()),
+        None => format!("sqlite://{}?mode=rwc", default_db_path.to_string_lossy()),
     };
 
     match cli.command {

@@ -4,7 +4,7 @@ Before=sleep.target
 
 [Service]
 Type=oneshot
-ExecStart=/bin/sh -c "cd $HOME && ./.local/bin/coffeetime-daemon before-sleep"
+ExecStart=/bin/sh -c "cd $HOME && ./.local/share/coffeetime/coffeetime-daemon before-sleep"
 
 [Install]
 WantedBy=sleep.target
