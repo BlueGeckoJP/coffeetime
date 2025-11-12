@@ -1,25 +1,26 @@
 use crate::database;
 
 pub async fn exec_start(database_url: &str) -> anyhow::Result<()> {
-    database::db_write_exec_start(database_url).await?;
+    database::close_active_session(database_url).await?;
+    database::create_session(database_url, chrono::Utc::now()).await?;
 
     Ok(())
 }
 
 pub async fn exec_stop(database_url: &str) -> anyhow::Result<()> {
-    database::db_write_exec_stop(database_url).await?;
+    database::close_active_session(database_url).await?;
 
     Ok(())
 }
 
 pub async fn before_sleep(database_url: &str) -> anyhow::Result<()> {
-    database::db_write_before_sleep(database_url).await?;
+    database::start_sleep_period(database_url, chrono::Utc::now()).await?;
 
     Ok(())
 }
 
 pub async fn after_sleep(database_url: &str) -> anyhow::Result<()> {
-    database::db_write_after_sleep(database_url).await?;
+    database::end_sleep_period(database_url, chrono::Utc::now()).await?;
 
     Ok(())
 }
