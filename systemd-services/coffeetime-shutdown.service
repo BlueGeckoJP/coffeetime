@@ -8,4 +8,4 @@ Type=oneshot
 ExecStart=/bin/sh -c "<<<EXEC_PATH>>> -d <<<DB_PATH>>> exec-stop"
 
 [Install]
-WantedBy=default.target
+WantedBy=shutdown.target
