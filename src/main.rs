@@ -33,8 +33,8 @@ fn build_ui(app: &Application) {
 
     let today_label = Label::builder()
         .halign(gtk::Align::Start)
-        .margin_top(8)
-        .margin_start(16)
+        .margin_top(16)
+        .margin_start(30)
         .margin_end(0)
         .build();
     today_label.set_markup("<span font='12'>Today</span>");
@@ -42,7 +42,7 @@ fn build_ui(app: &Application) {
     let today_screen_time_label = Label::builder()
         .halign(gtk::Align::Start)
         .margin_top(0)
-        .margin_start(16)
+        .margin_start(30)
         .margin_end(32)
         .build();
 
