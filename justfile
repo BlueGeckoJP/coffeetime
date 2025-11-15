@@ -25,3 +25,23 @@ install:
     sudo systemctl enable coffeetime-before-sleep.service
     sudo systemctl enable coffeetime-after-sleep.service
     @echo "Installation completed successfully"
+
+uninstall:
+    # remove systemd services (user level)
+    systemctl --user disable coffeetime-startup.service || true
+    systemctl --user disable coffeetime-shutdown.service || true
+    rm -f $HOME/.config/systemd/user/coffeetime-startup.service
+    rm -f $HOME/.config/systemd/user/coffeetime-shutdown.service
+    systemctl --user daemon-reload
+    # remove systemd services (system level)
+    sudo systemctl disable coffeetime-before-sleep.service || true
+    sudo systemctl disable coffeetime-after-sleep.service || true
+    sudo rm -f /etc/systemd/system/coffeetime-before-sleep.service
+    sudo rm -f /etc/systemd/system/coffeetime-after-sleep.service
+    sudo systemctl daemon-reload
+    @echo "Uninstallation completed successfully"
+
+uninstall-all:
+    just uninstall
+    rm -rf $HOME/.local/share/coffeetime/
+    @echo "Complete uninstallation completed successfully"
