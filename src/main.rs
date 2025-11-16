@@ -8,6 +8,8 @@ use anyhow::Ok;
 use gtk::{Application, prelude::*};
 use gtk::{Box, Label, Orientation};
 
+use crate::utils::get_humanized_uptime;
+
 fn main() -> anyhow::Result<()> {
     let app = Application::builder()
         .application_id("me.bluegecko.coffeetime")
@@ -54,10 +56,19 @@ fn build_ui(app: &Application) {
         .to_string(),
     );
 
+    let uptime_label = Label::builder()
+        .label(format!("Uptime: {}", get_humanized_uptime()))
+        .halign(gtk::Align::Start)
+        .margin_top(8)
+        .margin_start(30)
+        .margin_end(0)
+        .build();
+
     let graph = draw_graph::draw_graph();
 
     top_box.append(&today_label);
     top_box.append(&today_screen_time_label);
+    top_box.append(&uptime_label);
     top_box.append(&graph);
 
     let base_box = Box::builder()
