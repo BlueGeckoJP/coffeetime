@@ -21,8 +21,8 @@ pub fn get_humanized_uptime() -> String {
     if let Some(uptime) = uptime {
         let duration = Duration::seconds(uptime as i64);
         let days = duration.num_days();
-        let hours = duration.num_days() % 24;
-        let minutes = duration.num_minutes() & 60;
+        let hours = duration.num_hours() % 24;
+        let minutes = duration.num_minutes() % 60;
         format!("{}d {}h {}m", days, hours, minutes)
     } else {
         String::from("-d -h -m")
