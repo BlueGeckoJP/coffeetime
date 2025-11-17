@@ -64,11 +64,20 @@ fn build_ui(app: &Application) {
         .margin_end(0)
         .build();
 
+    let today_box = Box::builder()
+        .halign(gtk::Align::Fill)
+        .valign(gtk::Align::Start)
+        .orientation(Orientation::Vertical)
+        .spacing(0)
+        .build();
+
+    today_box.append(&today_label);
+    today_box.append(&today_screen_time_label);
+    today_box.append(&uptime_label);
+
     let graph = draw_graph::draw_graph();
 
-    top_box.append(&today_label);
-    top_box.append(&today_screen_time_label);
-    top_box.append(&uptime_label);
+    top_box.append(&today_box);
     top_box.append(&graph);
 
     let base_box = Box::builder()
