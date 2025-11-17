@@ -75,9 +75,42 @@ fn build_ui(app: &Application) {
     today_box.append(&today_screen_time_label);
     today_box.append(&uptime_label);
 
+    let avg_screen_time_label = Label::builder()
+        .halign(gtk::Align::Start)
+        .margin_top(8)
+        .margin_start(30)
+        .margin_end(0)
+        .build();
+    avg_screen_time_label.set_markup(
+        &format!(
+            "<span font='12'>Avg: {}</span>",
+            data_processing::get_avg_screen_time().unwrap_or("-h -m".to_string())
+        )
+        .to_string(),
+    );
+
+    let avg_box = Box::builder()
+        .halign(gtk::Align::Fill)
+        .valign(gtk::Align::Start)
+        .orientation(Orientation::Vertical)
+        .spacing(0)
+        .build();
+
+    avg_box.append(&avg_screen_time_label);
+
+    let top_labels_box = Box::builder()
+        .halign(gtk::Align::Fill)
+        .valign(gtk::Align::Start)
+        .orientation(Orientation::Horizontal)
+        .spacing(50)
+        .build();
+
+    top_labels_box.append(&today_box);
+    top_labels_box.append(&avg_box);
+
     let graph = draw_graph::draw_graph();
 
-    top_box.append(&today_box);
+    top_box.append(&top_labels_box);
     top_box.append(&graph);
 
     let base_box = Box::builder()
