@@ -75,15 +75,30 @@ fn build_ui(app: &Application) {
     today_box.append(&today_screen_time_label);
     today_box.append(&uptime_label);
 
+    let avg_date_span = Label::builder()
+        .halign(gtk::Align::Start)
+        .margin_top(16)
+        .margin_start(30)
+        .margin_end(0)
+        .build();
+    let (today_str, seven_days_ago_str) = utils::get_today_and_seven_days_ago();
+    avg_date_span.set_markup(
+        &format!(
+            "<span font='12'>Average {} - {}</span>",
+            seven_days_ago_str, today_str
+        )
+        .to_string(),
+    );
+
     let avg_screen_time_label = Label::builder()
         .halign(gtk::Align::Start)
-        .margin_top(8)
+        .margin_top(0)
         .margin_start(30)
         .margin_end(0)
         .build();
     avg_screen_time_label.set_markup(
         &format!(
-            "<span font='12'>Avg: {}</span>",
+            "<span font='32'>{}</span>",
             data_processing::get_avg_screen_time().unwrap_or("-h -m".to_string())
         )
         .to_string(),
@@ -96,6 +111,7 @@ fn build_ui(app: &Application) {
         .spacing(0)
         .build();
 
+    avg_box.append(&avg_date_span);
     avg_box.append(&avg_screen_time_label);
 
     let top_labels_box = Box::builder()

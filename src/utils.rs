@@ -28,3 +28,13 @@ pub fn get_humanized_uptime() -> String {
         String::from("-d -h -m")
     }
 }
+
+pub fn get_today_and_seven_days_ago() -> (String, String) {
+    let start_of_today = get_utc_start_of_today();
+    let seven_days_ago = start_of_today - Duration::days(7);
+    let local_start_of_today = start_of_today.with_timezone(&chrono::Local);
+    let local_seven_days_ago = seven_days_ago.with_timezone(&chrono::Local);
+    let today_str = local_start_of_today.format("%b %d").to_string();
+    let seven_days_ago_str = local_seven_days_ago.format("%b %d").to_string();
+    (today_str, seven_days_ago_str)
+}
