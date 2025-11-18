@@ -12,31 +12,26 @@ install:
     # prepare directories
     mkdir -p $HOME/.local/share/coffeetime/
     cp target/release/coffeetime-daemon $HOME/.local/share/coffeetime/
-    mkdir -p $HOME/.config/systemd/user/
-    # install systemd services (user level)
-    sed -e "s|<<<EXEC_PATH>>>|{{exec_path}}|g" -e "s|<<<DB_PATH>>>|{{db_path}}|g" systemd-services/coffeetime-startup.service | tee $HOME/.config/systemd/user/coffeetime-startup.service > /dev/null
-    sed -e "s|<<<EXEC_PATH>>>|{{exec_path}}|g" -e "s|<<<DB_PATH>>>|{{db_path}}|g" systemd-services/coffeetime-shutdown.service | tee $HOME/.config/systemd/user/coffeetime-shutdown.service > /dev/null
-    systemctl --user daemon-reload
-    systemctl --user enable coffeetime-startup.service
-    systemctl --user enable coffeetime-shutdown.service
     # install systemd timers (system level)
+    sed -e "s|<<<EXEC_PATH>>>|{{exec_path}}|g" -e "s|<<<DB_PATH>>>|{{db_path}}|g" systemd-services/coffeetime-startup.service | sudo tee /etc/systemd/system/coffeetime-startup.service > /dev/null
+    sed -e "s|<<<EXEC_PATH>>>|{{exec_path}}|g" -e "s|<<<DB_PATH>>>|{{db_path}}|g" systemd-services/coffeetime-shutdown.service | sudo tee /etc/systemd/system/coffeetime-shutdown.service > /dev/null
     sed -e "s|<<<EXEC_PATH>>>|{{exec_path}}|g" -e "s|<<<DB_PATH>>>|{{db_path}}|g" systemd-services/coffeetime-before-sleep.service | sudo tee /etc/systemd/system/coffeetime-before-sleep.service > /dev/null
     sed -e "s|<<<EXEC_PATH>>>|{{exec_path}}|g" -e "s|<<<DB_PATH>>>|{{db_path}}|g" systemd-services/coffeetime-after-sleep.service | sudo tee /etc/systemd/system/coffeetime-after-sleep.service > /dev/null
     sudo systemctl daemon-reload
+    sudo systemctl enable coffeetime-startup.service
+    sudo systemctl enable coffeetime-shutdown.service
     sudo systemctl enable coffeetime-before-sleep.service
     sudo systemctl enable coffeetime-after-sleep.service
     @echo "Installation completed successfully"
 
 uninstall:
-    # remove systemd services (user level)
-    systemctl --user disable coffeetime-startup.service || true
-    systemctl --user disable coffeetime-shutdown.service || true
-    rm -f $HOME/.config/systemd/user/coffeetime-startup.service
-    rm -f $HOME/.config/systemd/user/coffeetime-shutdown.service
-    systemctl --user daemon-reload
     # remove systemd services (system level)
+    sudo systemctl disable coffeetime-startup.service || true
+    sudo systemctl disable coffeetime-shutdown.service || true
     sudo systemctl disable coffeetime-before-sleep.service || true
     sudo systemctl disable coffeetime-after-sleep.service || true
+    sudo rm -f /etc/systemd/system/coffeetime-startup.service
+    sudo rm -f /etc/systemd/system/coffeetime-shutdown.service
     sudo rm -f /etc/systemd/system/coffeetime-before-sleep.service
     sudo rm -f /etc/systemd/system/coffeetime-after-sleep.service
     sudo systemctl daemon-reload
