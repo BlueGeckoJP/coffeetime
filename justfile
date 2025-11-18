@@ -8,6 +8,7 @@ build:
     @echo "The deliverables are located within target/release"
 
 install:
+    just build
     # prepare directories
     mkdir -p $HOME/.local/share/coffeetime/
     cp target/release/coffeetime-daemon $HOME/.local/share/coffeetime/
