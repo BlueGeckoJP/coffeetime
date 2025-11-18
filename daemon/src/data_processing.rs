@@ -1,7 +1,6 @@
 use crate::database;
 
 pub async fn exec_start(database_url: &str) -> anyhow::Result<()> {
-    database::close_active_session(database_url).await?;
     database::create_session(database_url, chrono::Utc::now()).await?;
 
     Ok(())
