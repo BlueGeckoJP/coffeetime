@@ -48,18 +48,24 @@ fn draw_rounded_rectangle_top(
     context.close_path();
 }
 
+fn get_label_color() -> (f64, f64, f64) {
+    let label_for_get_color = gtk::Label::new(None);
+    let label_style = label_for_get_color.style_context();
+    let label_color = label_style.color();
+    (
+        label_color.red() as f64,
+        label_color.green() as f64,
+        label_color.blue() as f64,
+    )
+}
+
 pub fn draw_graph() -> DrawingArea {
     let drawing_area = DrawingArea::new();
     drawing_area.set_content_width(400);
     drawing_area.set_content_height(300);
 
     drawing_area.set_draw_func(move |_, context, width, height| {
-        let label_for_get_color = gtk::Label::new(None);
-        let label_style = label_for_get_color.style_context();
-        let label_color = label_style.color();
-        let label_red = label_color.red() as f64;
-        let label_green = label_color.green() as f64;
-        let label_blue = label_color.blue() as f64;
+        let (label_red, label_green, label_blue) = get_label_color();
 
         // test data
         let num_data = data_processing::last_seven_days_screen_time_f64().unwrap_or(vec![]);
